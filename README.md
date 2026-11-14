@@ -8,24 +8,25 @@ A clean-room research prototype exploring a deterministic, non-token, non-Transf
 - No external AI inference API or third-party runtime dependency.
 - Raw Unicode code points are consumed directly by the field-dynamics experiments.
 
-## Current components
+## Implemented components
 - NFD field encoding and bounded similarity-based episodic recall.
 - Tri-ledger dynamics with activation, temporal trace, prediction-error tension, and bounded local adaptation.
 - Narrow English sentence-pattern extraction for parent, father, mother, and friend relations.
 - Deterministic positive-Horn forward chaining with proof traces and resource limits.
-- Bounded fact memory with source provenance, duplicate consolidation, and configurable contradiction reporting.
+- Bounded in-process fact memory with source provenance, duplicate consolidation, and configurable contradiction reporting.
 - EnglishKnowledgeEngine connecting extraction, memory, and inference.
+- Runnable JSON-output end-to-end demonstration in `english_demo.py`.
 
 ## Quick start
 
+Requires Python 3.10 or newer. No package installation is required.
+
 ```bash
 python -m unittest discover -s tests -v
-python demo.py
-python nova_demo.py
 python -m nova_core.validation
+python english_demo.py
+python english_demo.py "Arun is the father of Maya. Maya is the mother of Ravi."
 ```
-
-Requires Python 3.10 or newer. No package installation is required.
 
 ## English knowledge pipeline
 
@@ -38,14 +39,24 @@ result = engine.process(
     source="example-source"
 )
 print(result.reasoning.facts)
+print(result.reasoning.proof)
 print(result.memory.conflicts)
 ```
 
-Only explicitly supported complete English sentence patterns are extracted. Unsupported text produces no inferred fact. The fact reasoner consumes structured facts and rules; it is not a general natural-language understanding engine.
+The CLI emits JSON containing extraction decisions, structured facts, derived facts, proof steps, memory evidence, and configured conflicts. Unsupported sentences are reported and never guessed.
 
-## Validation and limits
+## Supported English sentence patterns
 
-CI tests target Python 3.10–3.13. Synthetic ablations and microbenchmarks measure software mechanisms, not semantic intelligence. Similarity scores are not semantic confidence. The current agent shell is conservative and retrieval-based; broad open-domain answers, reliable fluent generation, persistent storage, web access, and autonomous tool use are not implemented.
+- `Arun is the father of Maya.`
+- `Meena is the mother of Ravi.`
+- `Maya is a friend of Arun.`
+- `Arun is a parent of Maya.`
+
+The extractor intentionally supports a narrow set of complete sentence forms. The reasoner consumes structured facts and explicit rules; it is not a general natural-language understanding engine.
+
+## Validation and limitations
+
+CI tests target Python 3.10–3.13. Synthetic ablations and microbenchmarks measure software mechanisms, not semantic intelligence. Similarity scores are not semantic confidence. Fact memory is in-process and bounded; it is not persistent across process restarts. Contradiction detection requires caller-configured opposing predicates. The prototype does not provide arbitrary English understanding, open-domain fluent generation, authentication, network APIs, web access, or autonomous tool use.
 
 Passing tests proves the tested software behavior only. It does not establish general intelligence, human-level reasoning, or global architectural novelty. Compare against documented baselines and conduct literature/prior-art review before making research novelty claims.
 
