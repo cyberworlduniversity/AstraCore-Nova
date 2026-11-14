@@ -42,6 +42,26 @@ class MultilingualFactExtractorTests(unittest.TestCase):
                          "Arun is a parent of Maya.")
         self.assertIn("தந்தை", verbalize_fact(("father", "அருண்", "மாயா"), "ta"))
 
+    def test_multi_sentence_tamil_reasoning_creates_grandparent_proof(self):
+        text = "அருண் மாயாவின் தந்தை. மாயா ரவியின் தாய்."
+        extracted, result = self.extractor.reason_many(text)
+        self.assertEqual(len(extracted), 2)
+        self.assertTrue(all(item.supported for item in extracted))
+        self.assertIn(("grandparent", "அருண்", "ரவி"), result.facts)
+        self.assertTrue(any(step.rule_name == "grandparent_transitive" for step in result.proof))
+
+    def test_multi_sentence_english_reasoning(self):
+        text = "Arun is the father of Maya. Maya is the mother of Ravi."
+        extracted, result = self.extractor.reason_many(text)
+        self.assertEqual(len(extracted), 2)
+        self.assertIn(("grandparent", "Arun", "Ravi"), result.facts)
+
+    def test_mixed_supported_and_unsupported_sentences_are_separated(self):
+        text = "அருண் மாயாவின் தந்தை. இன்று வானிலை நன்றாக உள்ளது."
+        extracted, result = self.extractor.reason_many(text)
+        self.assertTrue(extracted[0].supported)
+        self.assertFalse(extracted[1].supported)
+        self.assertNotIn(("weather", "நன்றாக"), result.facts)
     def test_invalid_input_rejected(self):
         with self.assertRaises(ValueError):
             self.extractor.extract("   ")
