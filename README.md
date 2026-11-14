@@ -31,3 +31,15 @@ python -m unittest discover -s tests -v
 
 ## Current status
 Prototype 0.1: deterministic field encoding and bounded associative recall. No model training has occurred.
+
+
+## NFD research engine v0.3
+
+The branch also includes an experimental tri-ledger event engine in
+nova_core/nfd_dynamics.py. It maintains activation, temporal-trace, and
+prediction-error-tension ledgers and applies a bounded local adaptation rule
+while consuming Unicode code points directly. See NFD_TRI_LEDGER_DESIGN.md.
+
+This is a research mechanism, not a language model. It does not yet provide
+semantic understanding, general reasoning, or fluent generation. Its novelty
+is unproven and must be evaluated against prior work and reproducible baselines.
