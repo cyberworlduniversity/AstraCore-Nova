@@ -1,6 +1,7 @@
 """End-to-end English fact extraction, memory, and bounded inference."""
 from __future__ import annotations
 from dataclasses import dataclass
+from os import PathLike
 from .fact_extraction import EnglishFactExtractor, ExtractionResult
 from .fact_memory import FactMemory, MemoryReport
 from .reasoning import IndependentReasoner, ReasoningResult, Rule
@@ -34,6 +35,15 @@ class EnglishKnowledgeEngine:
                 ("parent", "?x", "?y"), ("parent", "?y", "?z")
             ), ("grandparent", "?x", "?z")),
         )
+
+    def save_memory(self, path: str | PathLike) -> None:
+        """Persist the current fact memory as versioned JSON."""
+        self.memory.save(path)
+
+    def load_memory(self, path: str | PathLike) -> MemoryReport:
+        """Replace current memory with a strictly validated persisted snapshot."""
+        self.memory = FactMemory.load(path)
+        return self.memory.report()
 
     def process(self, text: str, source: str = "user_input") -> KnowledgeResult:
         if not isinstance(source, str) or not source.strip():
