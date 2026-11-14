@@ -15,11 +15,12 @@ class EnglishKnowledgeEngine:
     """Connect supported English patterns to provenance memory and inference."""
     def __init__(self, capacity: int = 1000, max_rounds: int = 32,
                  contradiction_pairs=()):
-        if max_rounds < 1:
-            raise ValueError("max_rounds must be positive")
+        if not isinstance(max_rounds, int) or max_rounds < 1:
+            raise ValueError("max_rounds must be a positive integer")
         self.extractor = EnglishFactExtractor()
-        self.memory = FactMemory(capacity=capacity,
-                                  contradiction_pairs=contradiction_pairs)
+        self.memory = FactMemory(
+            capacity=capacity, contradiction_pairs=contradiction_pairs
+        )
         self.max_rounds = max_rounds
 
     @staticmethod
@@ -35,6 +36,9 @@ class EnglishKnowledgeEngine:
         )
 
     def process(self, text: str, source: str = "user_input") -> KnowledgeResult:
+        if not isinstance(source, str) or not source.strip():
+            raise ValueError("source must be a non-empty string")
+        source = source.strip()
         extracted = self.extractor.extract_many(text)
         for item in extracted:
             for fact in item.facts:
