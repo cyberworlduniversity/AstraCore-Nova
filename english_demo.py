@@ -65,7 +65,7 @@ def main() -> int:
             "Only documented complete English sentence patterns are extracted.",
             "Unsupported sentences produce no guessed facts.",
             "Reasoning is bounded positive-Horn inference over structured facts.",
-            "Memory exists only for this process and is not persistent.",
+            "This one-shot demo does not save memory; use the interactive CLI for persistent JSON memory.",
             "This is not general language understanding or an LLM.",
         ],
         "extraction": [
