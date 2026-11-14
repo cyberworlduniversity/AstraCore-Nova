@@ -23,6 +23,10 @@ def _run_variant(text: str, variant: str, width: int = 32):
         elif variant == "no_tension":
             engine.tension = [0.0] * engine.width
         engine.step(char)
+        if variant == "no_trace":
+            engine.trace = [0.0] * engine.width
+        elif variant == "no_tension":
+            engine.tension = [0.0] * engine.width
     return engine.snapshot(), engine.bias
 
 def adaptation_report(repeats: int = 8) -> dict:
