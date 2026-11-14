@@ -27,8 +27,10 @@ produce no facts.
 2. Match one supported complete sentence pattern.
 3. Emit a structured relation tuple such as `(father, Arun, Maya)`.
 4. Apply explicit inference rules, e.g. father implies parent.
-5. Return facts and proof steps with the extraction pattern identifier.
-6. Render a result only through fixed Tamil or English templates.
+5. For multi-sentence input, split only at explicit sentence punctuation; do not tokenize words.
+6. Combine extracted facts and run bounded inference across sentence boundaries.
+7. Return facts and proof steps with the extraction pattern identifier.
+8. Render a result only through fixed Tamil or English templates.
 
 ## Validation
 
@@ -44,3 +46,12 @@ multi-sentence discourse. Tamil suffix handling is limited to the listed
 templates. The output is a structured fact/proof, not a free-form answer.
 Evaluate on manually labelled, held-out Tamil and English data before
 expanding coverage or making language-understanding claims.
+
+## Multi-sentence reasoning
+
+`extract_many(text)` returns one extraction result per punctuation-delimited sentence. `reason_many(text)` combines only supported facts, derives parent relations from father/mother facts, and can infer a grandparent relation across two sentences. Unsupported sentences remain explicitly marked and contribute no facts. Example:
+
+- `அருண் மாயாவின் தந்தை. மாயா ரவியின் தாய்.`
+- Derived: `(grandparent, அருண், ரவி)` with a proof chain through both parent facts.
+
+This is still a narrow pattern engine. Punctuation-based segmentation is not full discourse understanding.
