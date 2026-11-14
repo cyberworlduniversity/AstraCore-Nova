@@ -21,17 +21,18 @@ A clean-room research prototype exploring a deterministic, non-token, non-Transf
 
 ## Requirements and quick start
 
-Python 3.10 or newer. No package installation is required.
+Python 3.10 or newer. Runtime uses only the Python standard library. The package can be installed locally with pip (the build frontend uses setuptools).
 
 ```bash
+python -m pip install .
 python -m unittest discover -s tests -v
 python -m nova_core.validation
-python -m nova_core --memory nova-memory.json
+astracore-nova --memory nova-memory.json
 python english_demo.py
 python english_demo.py "Arun is the father of Maya. Maya is the mother of Ravi."
 ```
 
-The interactive CLI accepts supported English statements and commands:
+The installed `astracore-nova` command starts the interactive local CLI. For a source checkout, `python -m nova_core --memory nova-memory.json` is also supported. The interactive CLI accepts supported English statements and commands:
 `:facts`, `:save`, `:load`, `:help`, and `:quit`. It saves changed memory on exit.
 
 ## English knowledge pipeline
