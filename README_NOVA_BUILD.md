@@ -1,4 +1,4 @@
-# AstraCore Nova — English-First Prototype Build 0.3
+# AstraCore Nova — English-First Prototype Build 0.4
 
 This branch contains an isolated research prototype with an English-first symbolic knowledge path. It does not replace or import the original AstraCore implementation.
 
@@ -13,9 +13,9 @@ This branch contains an isolated research prototype with an English-first symbol
 ## Run
 ```bash
 python -m unittest discover -s tests -v
-python demo.py
-python nova_demo.py
 python -m nova_core.validation
+python -m nova_core --memory nova-memory.json
+python english_demo.py
 ```
 
 ## Implemented English path
@@ -23,14 +23,15 @@ python -m nova_core.validation
 2. Structured fact storage with source provenance and duplicate consolidation.
 3. Configurable contradiction alerts that preserve both sides of a conflict.
 4. Bounded positive-Horn inference with inspectable proof steps.
-5. A single EnglishKnowledgeEngine entry point joining extraction, memory, and inference.
+5. Versioned JSON persistence with atomic writes and strict load validation.
+6. An interactive CLI and JSON demonstration for local use.
 
 ## What this build proves
-It proves only the tested software behavior: deterministic field updates, bounded stores, supported pattern extraction, structured inference, provenance handling, and configured conflict reporting. It does not prove general intelligence, broad semantic understanding, autonomous learning, fluent generation, or architectural novelty.
+It proves only the tested software behavior: deterministic field updates, bounded stores, supported pattern extraction, structured inference, provenance handling, persistence round trips, and configured conflict reporting. It does not prove general intelligence, broad semantic understanding, autonomous learning, fluent generation, or architectural novelty.
 
 ## Remaining production gates
 - Expand and benchmark English extraction on manually labelled held-out datasets.
-- Add persistent storage with migrations, backup, and recovery tests.
+- Add a production database with migrations, backup, and recovery tests.
 - Add a documented application/API boundary, input limits, authentication, and audit logs before network exposure.
 - Add permissioned tools only after sandbox and threat-model tests.
 - Evaluate retrieval against exact-match, character n-gram, and random baselines.
