@@ -78,7 +78,13 @@ class EnglishFactExtractor:
             if match:
                 subject = self._clean(match.group("subject"))
                 obj = self._clean(match.group("object"))
-                if subject and obj and subject.casefold() != obj.casefold():
+                uncertain_prefixes = ("i think ", "i believe ", "perhaps ", "maybe ", "probably ")
+                if (
+                    subject
+                    and obj
+                    and subject.casefold() != obj.casefold()
+                    and not subject.casefold().startswith(uncertain_prefixes)
+                ):
                     return ExtractionResult(
                         sentence, ((relation, subject, obj),), "en", name, True,
                         "Extracted by an explicit deterministic English pattern.",
