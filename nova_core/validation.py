@@ -4,14 +4,15 @@ from __future__ import annotations
 import json
 import time
 import tracemalloc
+
 from .nfd_dynamics import NFDDynamics
 
 CORPUS = (
     "AstraCore Nova learns from repeated observations.",
-    "தமிழ் மொழி ஒரு செம்மொழி.",
-    "தமிழும் English-உம் கலந்த input.",
+    "English language processing uses explicit sentence patterns.",
     "prediction error and temporal memory",
 )
+
 
 def _run_variant(text: str, variant: str, width: int = 32):
     engine = NFDDynamics(width=width)
@@ -29,22 +30,26 @@ def _run_variant(text: str, variant: str, width: int = 32):
             engine.tension = [0.0] * engine.width
     return engine.snapshot(), engine.bias
 
+
 def adaptation_report(repeats: int = 8) -> dict:
     if repeats < 2:
         raise ValueError("repeats must be >= 2")
-    text = "தமிழ் pattern " * repeats
+    text = "English pattern " * repeats
     learned, bias = _run_variant(text, "full")
     frozen, frozen_bias = _run_variant(text, "no_adaptation")
     return {
         "bias_l1": sum(abs(x) for x in bias),
         "frozen_bias_l1": sum(abs(x) for x in frozen_bias),
-        "adapted_state_delta_l1": sum(abs(a-b) for a,b in zip(learned.activation, frozen.activation)),
+        "adapted_state_delta_l1": sum(
+            abs(a - b) for a, b in zip(learned.activation, frozen.activation)
+        ),
         "steps": learned.step,
         "repeats": repeats,
     }
 
+
 def ablation_report() -> dict:
-    text = "Astra தமிழ் " * 6
+    text = "Astra English " * 6
     results = {}
     for variant in ("full", "no_trace", "no_tension", "no_adaptation"):
         frame, bias = _run_variant(text, variant)
@@ -55,6 +60,7 @@ def ablation_report() -> dict:
             "bias_l1": sum(abs(x) for x in bias),
         }
     return results
+
 
 def benchmark(repeats: int = 10, width: int = 32) -> dict:
     if repeats < 1:
@@ -78,14 +84,19 @@ def benchmark(repeats: int = 10, width: int = 32) -> dict:
         "final_tension_l1": round(sum(abs(x) for x in frame.tension), 8),
     }
 
+
 def run_validation() -> dict:
     return {
         "schema": "astracore-nova-nfd-v0.4",
         "adaptation": adaptation_report(),
         "ablations": ablation_report(),
         "benchmark": benchmark(),
-        "caveat": "Synthetic microbenchmark; not evidence of language understanding or general intelligence.",
+        "caveat": (
+            "Synthetic microbenchmark; not evidence of language understanding "
+            "or general intelligence."
+        ),
     }
+
 
 if __name__ == "__main__":
     print(json.dumps(run_validation(), ensure_ascii=False, indent=2))
