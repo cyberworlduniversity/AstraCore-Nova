@@ -127,9 +127,10 @@ class EnglishFactExtractor:
         for fact in extracted.facts:
             engine.add_fact(fact)
         if extracted.supported and extracted.facts[0][0] in {"father", "mother"}:
+            relation = extracted.facts[0][0]
             engine.add_rule(Rule(
-                "parent_from_family_relation",
-                ((extracted.facts[0][0], "?x", "?y"),), ("parent", "?x", "?y")
+                "parent_from_" + relation,
+                ((relation, "?x", "?y"),), ("parent", "?x", "?y")
             ))
         return extracted, engine.infer()
 
