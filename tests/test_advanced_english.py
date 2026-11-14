@@ -57,6 +57,28 @@ class AdvancedEnglishGrammarTests(unittest.TestCase):
             "Arun is married to Meena.",
         )
 
+
+    def test_sentence_character_limit_is_enforced(self):
+        sentence = "A" * (self.extractor.MAX_SENTENCE_CHARS + 1)
+        with self.assertRaises(ValueError):
+            self.extractor.extract(sentence)
+
+    def test_control_characters_are_rejected(self):
+        with self.assertRaises(ValueError):
+            self.extractor.extract("Maya\x00 knows Ravi.")
+
+    def test_total_text_limit_is_enforced(self):
+        text = "A" * (self.extractor.MAX_TEXT_CHARS + 1)
+        with self.assertRaises(ValueError):
+            self.extractor.extract_many(text)
+
+    def test_sentence_count_limit_is_enforced(self):
+        text = " ".join(
+            "Unsupported statement." for _ in range(self.extractor.MAX_SENTENCES + 1)
+        )
+        with self.assertRaises(ValueError):
+            self.extractor.extract_many(text)
+
     def test_multi_sentence_extended_extraction(self):
         results = self.extractor.extract_many(
             "Maya lives in Chennai. Ravi likes science. The weather is pleasant."
