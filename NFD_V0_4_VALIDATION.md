@@ -18,13 +18,13 @@ python -m nova_core.validation
   adaptation mechanisms disabled one at a time.
 - Microbenchmark: reports processed Unicode code-point events, elapsed wall
   time, throughput, peak traced Python memory, and final-state magnitudes.
-- Corpus: deterministic synthetic English, Tamil, and mixed-script examples.
+- Corpus: deterministic synthetic English-only examples.
 
 ## Interpretation limits
 
 These are controlled software experiments, not semantic-language benchmarks.
 The ablations are mechanism-level controls; the activation ledger remains the
-engine's state substrate and is not independently removable in this phase.
+engine state substrate and is not independently removable in this phase.
 Runtime and memory values are machine-dependent. Do not compare runs from
 different machines as if they were controlled results. No claim of general
 reasoning, fluent generation, or architectural novelty follows from passing
