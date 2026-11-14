@@ -34,5 +34,5 @@ class NFDValidationTests(unittest.TestCase):
         self.assertGreater(result["events_per_second"], 0.0)
         self.assertGreater(result["peak_traced_bytes"], 0)
 
-if __tests__ == "__main__":
+if __name__ == "__main__":
     unittest.main()
