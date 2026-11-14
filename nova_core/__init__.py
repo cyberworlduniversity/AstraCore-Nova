@@ -4,10 +4,12 @@ from .memory import Episode, EpisodicMemory
 from .nfd_dynamics import NFDFrame, NFDDynamics
 from .reasoning import IndependentReasoner, ProofStep, ReasoningResult, Rule
 from .fact_extraction import ExtractionResult, EnglishFactExtractor, verbalize_fact
+from .fact_memory import FactConflict, FactEvidence, FactMemory, MemoryReport
 
 __all__ = [
     "AgentReply", "Episode", "EpisodicMemory", "NFDFrame",
     "NFDDynamics", "NovaAgent", "encode_state", "field_similarity",
     "IndependentReasoner", "ProofStep", "ReasoningResult", "Rule",
     "ExtractionResult", "EnglishFactExtractor", "verbalize_fact",
+    "FactConflict", "FactEvidence", "FactMemory", "MemoryReport",
 ]
