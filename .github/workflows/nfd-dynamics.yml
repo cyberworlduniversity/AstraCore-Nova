@@ -56,9 +56,10 @@ jobs:
         run: |
           mkdir -p validation-results
           python -m nova_core.validation | tee validation-results/nfd-v0.4-results.json
+          python evaluate_english.py --output validation-results/english-pattern-evaluation.json
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
         with:
           name: nfd-v0.4-validation-results
-          path: validation-results/nfd-v0.4-results.json
+          path: validation-results/*.json
           if-no-files-found: error
