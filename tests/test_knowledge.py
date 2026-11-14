@@ -1,4 +1,6 @@
+import tempfile
 import unittest
+from pathlib import Path
 from nova_core.knowledge import EnglishKnowledgeEngine
 
 class EnglishKnowledgeEngineTests(unittest.TestCase):
@@ -44,6 +46,18 @@ class EnglishKnowledgeEngineTests(unittest.TestCase):
     def test_invalid_round_limit_is_rejected(self):
         with self.assertRaises(ValueError):
             EnglishKnowledgeEngine(max_rounds=0)
+
+    def test_memory_survives_engine_restart(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "knowledge.json"
+            first = EnglishKnowledgeEngine()
+            first.process("Arun is the father of Maya.", source="source-a")
+            first.save_memory(path)
+            restarted = EnglishKnowledgeEngine()
+            restored = restarted.load_memory(path)
+            self.assertTrue(any(item.fact == ("father", "Arun", "Maya") for item in restored.facts))
+            result = restarted.process("Maya is the mother of Ravi.", source="source-b")
+            self.assertIn(("grandparent", "Arun", "Ravi"), result.reasoning.facts)
 
 if __name__ == "__main__":
     unittest.main()
