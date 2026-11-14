@@ -26,9 +26,9 @@ class MultilingualFactExtractor:
         ("english_friend", re.compile(r"^(?P<subject>.+?) is (?:a )?friend of (?P<object>.+?)$", re.I), "friend"),
     )
     _tamil = (
-        ("tamil_father", re.compile(r"^(?P<subject>.+?)\s+(?P<object>.+?)(?:வின்|யின்|இன்)\\s*(?P<relation>தந்தை)"), "father"),
-        ("tamil_mother", re.compile(r"^(?P<subject>.+?)\s+(?P<object>.+?)(?:வின்|யின்|இன்)\\s*(?P<relation>தாய்)"), "mother"),
-        ("tamil_parent", re.compile(r"^(?P<subject>.+?)\s+(?P<object>.+?)(?:வின்|யின்|இன்)\\s*(?P<relation>பெற்றோர்)"), "parent"),
+        ("tamil_father", re.compile(r"^(?P<subject>.+?)\s+(?P<object>.+?)(?:வின்|யின்|இன்)\s*(?P<relation>தந்தை)"), "father"),
+        ("tamil_mother", re.compile(r"^(?P<subject>.+?)\s+(?P<object>.+?)(?:வின்|யின்|இன்)\s*(?P<relation>தாய்)"), "mother"),
+        ("tamil_parent", re.compile(r"^(?P<subject>.+?)\s+(?P<object>.+?)(?:வின்|யின்|இன்)\s*(?P<relation>பெற்றோர்)"), "parent"),
     )
 
     @staticmethod
