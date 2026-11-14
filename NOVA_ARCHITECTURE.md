@@ -2,51 +2,37 @@
 
 ## Research objective
 
-Explore a new, inspectable computational path for an AI agent that does not depend on tokenizers, Transformer models, pretrained weights, or external model APIs. The current implementation is a research prototype, not a claim of general intelligence or proven architectural novelty.
+Explore an inspectable computation path without tokenizers, Transformer models, pretrained weights, or external model APIs. This is a research prototype, not a claim of general intelligence or proven architectural novelty.
 
-## Prototype design: Relational Field State (RFS)
+## Implemented components
 
-RFS treats input as a stream of Unicode code points. A bounded state field is updated by position-sensitive input signals and local neighbour interactions. A separate episodic store keeps source examples and their signatures. Retrieval is exact deterministic similarity ranking; it is not semantic understanding.
+1. Raw Unicode code-point field encoding and bounded state dynamics.
+2. Bounded episodic similarity retrieval.
+3. English-only deterministic sentence-pattern extraction for a small set of explicit relations.
+4. Positive-Horn forward chaining over supplied structured facts, with proof traces.
+5. Bounded fact memory with provenance, duplicate consolidation, and configured contradiction alerts.
+6. An EnglishKnowledgeEngine that connects extraction, memory, and reasoning.
 
-The agent pipeline is deliberately explicit:
+## End-to-end flow
 
-1. Normalize and validate the incoming text without splitting it into tokens.
-2. Encode the raw Unicode stream into a fixed-width field state.
-3. Retrieve a small set of related stored episodes.
-4. Build a transparent response from retrieved evidence and deterministic rules.
-5. Mark unsupported requests as unknown rather than fabricate facts.
-6. Store the interaction only when the caller explicitly enables learning.
+1. Validate English text and split only at explicit sentence punctuation.
+2. Match supported complete sentence patterns; unsupported text yields no fact.
+3. Store extracted facts with source labels.
+4. Apply explicit symbolic rules to the accumulated fact set.
+5. Preserve proof steps and store derived facts with rule provenance.
+6. Report configured opposing facts without silently choosing a winner.
 
 ## Current limitations
 
-- No gradient-based learning or trained language model exists yet.
-- No open-ended fluent text generation, reliable translation, or general reasoning.
+- English extraction coverage is narrow and pattern-based.
+- No arbitrary natural-language understanding or open-ended fluent generation.
+- No persistent database, server/API, authentication, browser access, or autonomous tools.
 - Similarity scores are mathematical comparisons, not semantic confidence.
-- The first memory implementation is in-process and bounded.
-- No network server, authentication, tools, or autonomous execution is included.
+- Memory is in-process and bounded.
+- No self-directed learning or verified general reasoning.
 
 ## Research gates
 
-Before claiming progress, measure retrieval quality against baselines (exact match, character n-gram, and random ranking), include Tamil and English test sets, report latency and memory, and test adversarial inputs. A new name or formula alone does not establish novelty. Publish reproducible experiments and negative results.
-
-## Run
-
-```bash
-python -m unittest discover -s tests -v
-python demo.py
-```
+Compare retrieval against exact-match, character n-gram, and random baselines. Evaluate extraction precision/recall on manually labelled held-out English examples. Measure proof validity, contradiction policy coverage, latency, memory, collisions, and adversarial inputs. A new name or formula alone does not establish novelty. Publish reproducible experiments and negative results.
 
 Python 3.10+, standard library only.
-
-
-## v0.3 research direction: NFD Tri-Ledger Dynamics
-
-The next experiment is documented in NFD_TRI_LEDGER_DESIGN.md and implemented
-in nova_core/nfd_dynamics.py. It adds three coupled state ledgers: activation,
-temporal trace, and prediction-error tension. A bounded surprise-gated local
-adaptation rule updates the system as it consumes raw Unicode scalar events.
-
-This is not evidence of a globally unprecedented architecture. Related work
-exists in dynamical systems, predictive processing, and associative memory.
-The new mechanism must be evaluated with ablations and baselines before any
-novelty claim. It does not yet understand language or reason generally.
