@@ -37,3 +37,16 @@ python demo.py
 ```
 
 Python 3.10+, standard library only.
+
+
+## v0.3 research direction: NFD Tri-Ledger Dynamics
+
+The next experiment is documented in NFD_TRI_LEDGER_DESIGN.md and implemented
+in nova_core/nfd_dynamics.py. It adds three coupled state ledgers: activation,
+temporal trace, and prediction-error tension. A bounded surprise-gated local
+adaptation rule updates the system as it consumes raw Unicode scalar events.
+
+This is not evidence of a globally unprecedented architecture. Related work
+exists in dynamical systems, predictive processing, and associative memory.
+The new mechanism must be evaluated with ablations and baselines before any
+novelty claim. It does not yet understand language or reason generally.
