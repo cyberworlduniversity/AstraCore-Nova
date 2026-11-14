@@ -1,27 +1,37 @@
-# AstraCore Nova — Prototype Build 0.2
+# AstraCore Nova — English-First Prototype Build 0.3
 
-This branch adds an independent research scaffold alongside the existing NFD experiment. It does not replace or import the original AstraCore code.
+This branch contains an isolated research prototype with an English-first symbolic knowledge path. It does not replace or import the original AstraCore implementation.
 
 ## Design constraints
-- Raw Unicode code-point input; no tokenizer or token IDs.
+- Raw Unicode code-point input for the NFD field-dynamics experiment.
+- No tokenizer, token IDs, or embedding lookup table.
 - No Transformer, neural-network framework, pretrained weights, or external AI API.
 - Python standard library only.
 - Explicit bounded memory and evidence-aware responses.
-- Unknown answers are reported as unknown.
+- Unsupported English sentence forms produce no guessed facts.
 
 ## Run
 ```bash
 python -m unittest discover -s tests -v
+python demo.py
 python nova_demo.py
+python -m nova_core.validation
 ```
 
-## What this build proves
-It proves that the package, deterministic field transform, bounded episodic store, and conservative agent shell execute as software. It does **not** prove general intelligence, semantic understanding, learning from data, fluent generation, or architectural novelty.
+## Implemented English path
+1. Deterministic pattern extraction for a small set of explicit family/friend relations.
+2. Structured fact storage with source provenance and duplicate consolidation.
+3. Configurable contradiction alerts that preserve both sides of a conflict.
+4. Bounded positive-Horn inference with inspectable proof steps.
+5. A single EnglishKnowledgeEngine entry point joining extraction, memory, and inference.
 
-## Next research milestones
-1. Establish retrieval baselines and Tamil/English evaluation corpus.
-2. Measure latency, memory, collision behaviour, and robustness.
-3. Design an explicit online learning rule and test for catastrophic interference.
-4. Add structured planning only after measurable state/retrieval performance.
-5. Add controlled tool execution with permissions and audit logs.
-6. Consider language generation only after evaluation demonstrates useful predictive structure.
+## What this build proves
+It proves only the tested software behavior: deterministic field updates, bounded stores, supported pattern extraction, structured inference, provenance handling, and configured conflict reporting. It does not prove general intelligence, broad semantic understanding, autonomous learning, fluent generation, or architectural novelty.
+
+## Remaining production gates
+- Expand and benchmark English extraction on manually labelled held-out datasets.
+- Add persistent storage with migrations, backup, and recovery tests.
+- Add a documented application/API boundary, input limits, authentication, and audit logs before network exposure.
+- Add permissioned tools only after sandbox and threat-model tests.
+- Evaluate retrieval against exact-match, character n-gram, and random baselines.
+- Complete security, performance, and prior-art reviews before a production or novelty claim.
