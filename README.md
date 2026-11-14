@@ -41,6 +41,7 @@ result = engine.process(
 print(result.reasoning.facts)
 print(result.reasoning.proof)
 print(result.memory.conflicts)
+engine.save_memory("nova-memory.json")
 ```
 
 The CLI emits JSON containing extraction decisions, structured facts, derived facts, proof steps, memory evidence, and configured conflicts. Unsupported sentences are reported and never guessed.
