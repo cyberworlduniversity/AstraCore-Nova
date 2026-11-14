@@ -25,6 +25,10 @@ class ExtractionResult:
 class EnglishFactExtractor:
     """Extract explicit English relations using a bounded grammar catalogue."""
 
+    MAX_SENTENCE_CHARS = 2000
+    MAX_TEXT_CHARS = 100_000
+    MAX_SENTENCES = 1000
+
     # Order is deliberate: more specific forms precede broader forms.
     _patterns = (
         ("english_father", re.compile(
@@ -72,6 +76,10 @@ class EnglishFactExtractor:
     def extract(self, sentence: str) -> ExtractionResult:
         if not isinstance(sentence, str) or not sentence.strip():
             raise ValueError("sentence must be a non-empty string")
+        if len(sentence) > self.MAX_SENTENCE_CHARS:
+            raise ValueError("sentence exceeds the maximum character limit")
+        if any(ord(char) < 32 and char not in "\\t" for char in sentence):
+            raise ValueError("sentence contains unsupported control characters")
         text = self._clean(sentence)
         for name, pattern, relation in self._patterns:
             match = pattern.fullmatch(text)
@@ -98,6 +106,8 @@ class EnglishFactExtractor:
         """Split on sentence-final punctuation followed by whitespace."""
         if not isinstance(text, str) or not text.strip():
             raise ValueError("text must be a non-empty string")
+        if len(text) > self.MAX_TEXT_CHARS:
+            raise ValueError("text exceeds the maximum character limit")
         segments = [
             part.strip()
             for part in re.split(r"(?<=[.!?])\s+", text)
@@ -105,6 +115,8 @@ class EnglishFactExtractor:
         ]
         if not segments:
             segments = [text.strip()]
+        if len(segments) > self.MAX_SENTENCES:
+            raise ValueError("text exceeds the maximum sentence count")
         return tuple(self.extract(part) for part in segments)
 
     def reason_many(self, text: str, max_facts: int = 1000, max_rounds: int = 32):
