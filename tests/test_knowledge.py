@@ -36,5 +36,14 @@ class EnglishKnowledgeEngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             engine.process("   ")
 
+    def test_source_is_validated_even_for_unsupported_text(self):
+        engine = EnglishKnowledgeEngine()
+        with self.assertRaises(ValueError):
+            engine.process("Unsupported sentence.", source="   ")
+
+    def test_invalid_round_limit_is_rejected(self):
+        with self.assertRaises(ValueError):
+            EnglishKnowledgeEngine(max_rounds=0)
+
 if __name__ == "__main__":
     unittest.main()
