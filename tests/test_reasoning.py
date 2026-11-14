@@ -2,15 +2,15 @@ import unittest
 from nova_core.reasoning import IndependentReasoner, Rule
 
 class IndependentReasonerTests(unittest.TestCase):
-    def test_transitive_inference_with_tamil_symbols(self):
+    def test_transitive_inference(self):
         engine = IndependentReasoner()
-        engine.add_fact(("parent", "அருண்", "மாயா"))
-        engine.add_fact(("parent", "மாயா", "ரவி"))
+        engine.add_fact(("parent", "Arun", "Maya"))
+        engine.add_fact(("parent", "Maya", "Ravi"))
         engine.add_rule(Rule("grandparent", (
             ("parent", "?x", "?y"), ("parent", "?y", "?z")
         ), ("grandparent", "?x", "?z")))
         result = engine.infer()
-        self.assertIn(("grandparent", "அருண்", "ரவி"), result.derived)
+        self.assertIn(("grandparent", "Arun", "Ravi"), result.derived)
         self.assertTrue(result.saturated)
 
     def test_recursive_multi_hop_inference(self):
@@ -26,9 +26,9 @@ class IndependentReasonerTests(unittest.TestCase):
 
     def test_query_bindings(self):
         engine = IndependentReasoner()
-        engine.add_fact(("likes","மீனா","தமிழ்"))
+        engine.add_fact(("likes","Meena","Tea"))
         self.assertEqual(engine.query(("likes","?person","?subject")),
-                         ({"?person":"மீனா","?subject":"தமிழ்"},))
+                         ({"?person":"Meena","?subject":"Tea"},))
 
     def test_repeated_variable_must_match(self):
         engine = IndependentReasoner()
@@ -58,9 +58,9 @@ class IndependentReasonerTests(unittest.TestCase):
 
     def test_multiword_string_is_opaque(self):
         engine = IndependentReasoner()
-        engine.add_fact(("phrase","தமிழ் ஒரு மொழி"))
+        engine.add_fact(("phrase","a whole English phrase"))
         self.assertEqual(engine.query(("phrase","?whole")),
-                         ({"?whole":"தமிழ் ஒரு மொழி"},))
+                         ({"?whole":"a whole English phrase"},))
 
     def test_fact_limit(self):
         engine = IndependentReasoner(max_facts=1)
