@@ -1,7 +1,8 @@
 """Transparent, bounded English sentence-pattern fact extraction.
 
-This is not general NLP. It matches a small set of complete English sentence
-forms. No tokenization, model, embedding, or external API is used.
+This is deterministic pattern matching, not general NLP. It matches complete,
+documented English forms and emits explicit relation tuples. No tokenizer,
+token IDs, language model, embeddings, or external API are used.
 """
 from __future__ import annotations
 
@@ -22,26 +23,51 @@ class ExtractionResult:
 
 
 class EnglishFactExtractor:
-    """Extract a narrow set of explicit English family/friend relations."""
+    """Extract explicit English relations using a bounded grammar catalogue."""
 
+    # Order is deliberate: more specific forms precede broader forms.
     _patterns = (
-        ("english_parent", re.compile(
-            r"^(?P<subject>.+?) is (?:a )?parent of (?P<object>.+?)$", re.I
-        ), "parent"),
         ("english_father", re.compile(
             r"^(?P<subject>.+?) is (?:the )?father of (?P<object>.+?)$", re.I
         ), "father"),
         ("english_mother", re.compile(
             r"^(?P<subject>.+?) is (?:the )?mother of (?P<object>.+?)$", re.I
         ), "mother"),
+        ("english_parent", re.compile(
+            r"^(?P<subject>.+?) is (?:a )?parent of (?P<object>.+?)$", re.I
+        ), "parent"),
         ("english_friend", re.compile(
             r"^(?P<subject>.+?) is (?:a )?friend of (?P<object>.+?)$", re.I
         ), "friend"),
+        ("english_spouse", re.compile(
+            r"^(?P<subject>.+?) is married to (?P<object>.+?)$", re.I
+        ), "spouse"),
+        ("english_resides", re.compile(
+            r"^(?P<subject>.+?) (?:lives|resides) in (?P<object>.+?)$", re.I
+        ), "lives_in"),
+        ("english_located", re.compile(
+            r"^(?P<subject>.+?) is located in (?P<object>.+?)$", re.I
+        ), "lives_in"),
+        ("english_employment", re.compile(
+            r"^(?P<subject>.+?) (?:works|is employed) at (?P<object>.+?)$", re.I
+        ), "works_at"),
+        ("english_knowledge", re.compile(
+            r"^(?P<subject>.+?) knows (?P<object>.+?)$", re.I
+        ), "knows"),
+        ("english_ownership", re.compile(
+            r"^(?P<subject>.+?) owns (?P<object>.+?)$", re.I
+        ), "owns"),
+        ("english_preference_like", re.compile(
+            r"^(?P<subject>.+?) likes (?P<object>.+?)$", re.I
+        ), "likes"),
+        ("english_preference_love", re.compile(
+            r"^(?P<subject>.+?) loves (?P<object>.+?)$", re.I
+        ), "loves"),
     )
 
     @staticmethod
     def _clean(text: str) -> str:
-        return re.sub(r"^[\s\u200b]+|[\s\u200b]+$", "", text).rstrip(".!?")
+        return re.sub(r"^[\s\u200b]+|[\s\u200b]+$", "", text).rstrip(".!?").strip()
 
     def extract(self, sentence: str) -> ExtractionResult:
         if not isinstance(sentence, str) or not sentence.strip():
@@ -52,7 +78,7 @@ class EnglishFactExtractor:
             if match:
                 subject = self._clean(match.group("subject"))
                 obj = self._clean(match.group("object"))
-                if subject and obj:
+                if subject and obj and subject.casefold() != obj.casefold():
                     return ExtractionResult(
                         sentence, ((relation, subject, obj),), "en", name, True,
                         "Extracted by an explicit deterministic English pattern.",
@@ -63,7 +89,7 @@ class EnglishFactExtractor:
         )
 
     def extract_many(self, text: str) -> tuple[ExtractionResult, ...]:
-        """Extract sentences split only at explicit English punctuation."""
+        """Split on sentence-final punctuation followed by whitespace."""
         if not isinstance(text, str) or not text.strip():
             raise ValueError("text must be a non-empty string")
         segments = [
@@ -76,7 +102,7 @@ class EnglishFactExtractor:
         return tuple(self.extract(part) for part in segments)
 
     def reason_many(self, text: str, max_facts: int = 1000, max_rounds: int = 32):
-        """Combine supported English facts and apply bounded symbolic inference."""
+        """Extract facts and apply bounded positive-Horn family inference."""
         extracted = self.extract_many(text)
         engine = IndependentReasoner(max_facts=max_facts, max_rounds=max_rounds)
         for item in extracted:
@@ -100,18 +126,16 @@ class EnglishFactExtractor:
         engine = IndependentReasoner(max_facts=max_facts, max_rounds=max_rounds)
         for fact in extracted.facts:
             engine.add_fact(fact)
-        if extracted.supported:
+        if extracted.supported and extracted.facts[0][0] in {"father", "mother"}:
             engine.add_rule(Rule(
-                "parent_from_father", (("father", "?x", "?y"),), ("parent", "?x", "?y")
-            ))
-            engine.add_rule(Rule(
-                "parent_from_mother", (("mother", "?x", "?y"),), ("parent", "?x", "?y")
+                "parent_from_family_relation",
+                ((extracted.facts[0][0], "?x", "?y"),), ("parent", "?x", "?y")
             ))
         return extracted, engine.infer()
 
 
 def verbalize_fact(fact: Fact, language: str = "en") -> str:
-    """Render supported relation facts using fixed English templates only."""
+    """Render known relation facts using fixed English templates only."""
     if len(fact) != 3:
         raise ValueError("verbalizer expects a three-field relation fact")
     if language != "en":
@@ -123,6 +147,13 @@ def verbalize_fact(fact: Fact, language: str = "en") -> str:
         "parent": "is a parent of",
         "friend": "is a friend of",
         "grandparent": "is the grandparent of",
+        "spouse": "is married to",
+        "lives_in": "lives in",
+        "works_at": "works at",
+        "knows": "knows",
+        "owns": "owns",
+        "likes": "likes",
+        "loves": "loves",
     }
     if relation not in labels:
         raise ValueError("unsupported relation for English verbalization")
