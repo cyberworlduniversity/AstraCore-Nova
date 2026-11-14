@@ -20,3 +20,22 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Run complete test suite
         run: python -m unittest discover -s tests -v
+
+  validation-benchmark:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run NFD v0.4 validation and benchmark
+        run: |
+          mkdir -p validation-results
+          python -m nova_core.validation | tee validation-results/nfd-v0.4-results.json
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: nfd-v0.4-validation-results
+          path: validation-results/nfd-v0.4-results.json
+          if-no-files-found: error
