@@ -3,9 +3,9 @@
 ## Scope
 
 Adds a deterministic positive-Horn forward-chaining reasoner alongside the
-NFD v0.3 dynamics. It consumes explicitly supplied structured facts and rules.
-Symbols are opaque strings and may contain Tamil, English, mixed-script, or
-multi-word content. The engine never splits strings or tokenizes input.
+NFD v0.3 dynamics. It consumes explicitly supplied structured English facts
+and rules. Symbols are opaque strings; multi-word English values remain
+intact. The engine does not split strings or tokenize input.
 
 This is an independent symbolic inference component, not automatic natural
 language understanding and not a fluent language generator.
@@ -14,13 +14,13 @@ language understanding and not a fluent language generator.
 
     from nova_core.reasoning import IndependentReasoner, Rule
     engine = IndependentReasoner()
-    engine.add_fact(("parent", "அருண்", "மாயா"))
-    engine.add_fact(("parent", "மாயா", "ரவி"))
+    engine.add_fact(("parent", "Arun", "Maya"))
+    engine.add_fact(("parent", "Maya", "Ravi"))
     engine.add_rule(Rule("grandparent",
         (("parent", "?x", "?y"), ("parent", "?y", "?z")),
         ("grandparent", "?x", "?z")))
     result = engine.infer()
-    print(("grandparent", "அருண்", "ரவி") in result.facts)
+    print(("grandparent", "Arun", "Ravi") in result.facts)
 
 ## Semantics and safety
 
@@ -39,14 +39,12 @@ language understanding and not a fluent language generator.
 Run: python -m unittest discover -s tests -v
 
 Tests cover multi-hop inference, unification, repeated variables, proof traces,
-deterministic output, Tamil/mixed Unicode symbols, and resource bounds.
+deterministic output, English multi-word values, and resource bounds.
 
-## Limitations and next gates
+## Limitations
 
-The engine reasons only over facts and rules supplied in structured form. It
-does not extract facts from ordinary Tamil or English sentences. Before
-claiming language reasoning, build and evaluate a separate transparent
-sentence-to-fact interface against manually labelled Tamil and English data.
-Measure precision, recall, proof validity, contradiction handling, and
-generalization on held-out examples. Do not describe this prototype as general
-intelligence or natural-language understanding.
+The engine reasons only over facts and rules supplied in structured form.
+It does not independently understand arbitrary English prose. English
+sentence extraction is a separate narrow pattern-based component. Evaluate
+precision, recall, proof validity, contradiction handling, and generalization
+on held-out examples before making broader language claims.
