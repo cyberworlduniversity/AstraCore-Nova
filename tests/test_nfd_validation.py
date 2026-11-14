@@ -1,5 +1,7 @@
 import unittest
+
 from nova_core.validation import adaptation_report, ablation_report, benchmark
+
 
 class NFDValidationTests(unittest.TestCase):
     def test_adaptation_changes_bias_and_state(self):
@@ -27,12 +29,12 @@ class NFDValidationTests(unittest.TestCase):
         result = benchmark(repeats=1, width=8)
         self.assertEqual(result["events"], sum(len(x) for x in (
             "AstraCore Nova learns from repeated observations.",
-            "தமிழ் மொழி ஒரு செம்மொழி.",
-            "தமிழும் English-உம் கலந்த input.",
+            "English language processing uses explicit sentence patterns.",
             "prediction error and temporal memory",
         )))
         self.assertGreater(result["events_per_second"], 0.0)
         self.assertGreater(result["peak_traced_bytes"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
