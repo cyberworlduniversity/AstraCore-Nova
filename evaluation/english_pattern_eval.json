@@ -1,0 +1,295 @@
+{
+  "schema": "astracore-nova-english-pattern-evaluation",
+  "version": 1,
+  "description": "Small, hand-authored deterministic grammar conformance set. It measures only these curated examples, not general English understanding.",
+  "examples": [
+    {
+      "sentence": "Arun is the father of Maya.",
+      "expected_facts": [
+        [
+          "father",
+          "Arun",
+          "Maya"
+        ]
+      ]
+    },
+    {
+      "sentence": "Kumar is father of Nila.",
+      "expected_facts": [
+        [
+          "father",
+          "Kumar",
+          "Nila"
+        ]
+      ]
+    },
+    {
+      "sentence": "Meena is the mother of Ravi.",
+      "expected_facts": [
+        [
+          "mother",
+          "Meena",
+          "Ravi"
+        ]
+      ]
+    },
+    {
+      "sentence": "Latha is mother of Dev.",
+      "expected_facts": [
+        [
+          "mother",
+          "Latha",
+          "Dev"
+        ]
+      ]
+    },
+    {
+      "sentence": "Arun is a parent of Maya.",
+      "expected_facts": [
+        [
+          "parent",
+          "Arun",
+          "Maya"
+        ]
+      ]
+    },
+    {
+      "sentence": "Maya is parent of Ravi.",
+      "expected_facts": [
+        [
+          "parent",
+          "Maya",
+          "Ravi"
+        ]
+      ]
+    },
+    {
+      "sentence": "Ravi is a friend of Arun.",
+      "expected_facts": [
+        [
+          "friend",
+          "Ravi",
+          "Arun"
+        ]
+      ]
+    },
+    {
+      "sentence": "Nila is friend of Meena.",
+      "expected_facts": [
+        [
+          "friend",
+          "Nila",
+          "Meena"
+        ]
+      ]
+    },
+    {
+      "sentence": "Arun is married to Meena.",
+      "expected_facts": [
+        [
+          "spouse",
+          "Arun",
+          "Meena"
+        ]
+      ]
+    },
+    {
+      "sentence": "Kumar is married to Latha.",
+      "expected_facts": [
+        [
+          "spouse",
+          "Kumar",
+          "Latha"
+        ]
+      ]
+    },
+    {
+      "sentence": "Maya lives in Chennai.",
+      "expected_facts": [
+        [
+          "lives_in",
+          "Maya",
+          "Chennai"
+        ]
+      ]
+    },
+    {
+      "sentence": "Ravi resides in Vellore.",
+      "expected_facts": [
+        [
+          "lives_in",
+          "Ravi",
+          "Vellore"
+        ]
+      ]
+    },
+    {
+      "sentence": "CWU is located in India.",
+      "expected_facts": [
+        [
+          "lives_in",
+          "CWU",
+          "India"
+        ]
+      ]
+    },
+    {
+      "sentence": "Hemanathan works at CWU.",
+      "expected_facts": [
+        [
+          "works_at",
+          "Hemanathan",
+          "CWU"
+        ]
+      ]
+    },
+    {
+      "sentence": "Maya is employed at Acme Labs.",
+      "expected_facts": [
+        [
+          "works_at",
+          "Maya",
+          "Acme Labs"
+        ]
+      ]
+    },
+    {
+      "sentence": "Arun knows Ravi.",
+      "expected_facts": [
+        [
+          "knows",
+          "Arun",
+          "Ravi"
+        ]
+      ]
+    },
+    {
+      "sentence": "Meena knows Nila.",
+      "expected_facts": [
+        [
+          "knows",
+          "Meena",
+          "Nila"
+        ]
+      ]
+    },
+    {
+      "sentence": "Maya owns a laptop.",
+      "expected_facts": [
+        [
+          "owns",
+          "Maya",
+          "a laptop"
+        ]
+      ]
+    },
+    {
+      "sentence": "Ravi owns a bicycle.",
+      "expected_facts": [
+        [
+          "owns",
+          "Ravi",
+          "a bicycle"
+        ]
+      ]
+    },
+    {
+      "sentence": "Ravi likes science.",
+      "expected_facts": [
+        [
+          "likes",
+          "Ravi",
+          "science"
+        ]
+      ]
+    },
+    {
+      "sentence": "Maya likes mathematics.",
+      "expected_facts": [
+        [
+          "likes",
+          "Maya",
+          "mathematics"
+        ]
+      ]
+    },
+    {
+      "sentence": "Meena loves music.",
+      "expected_facts": [
+        [
+          "loves",
+          "Meena",
+          "music"
+        ]
+      ]
+    },
+    {
+      "sentence": "Arun loves reading.",
+      "expected_facts": [
+        [
+          "loves",
+          "Arun",
+          "reading"
+        ]
+      ]
+    },
+    {
+      "sentence": "Dev is a friend of Nila.",
+      "expected_facts": [
+        [
+          "friend",
+          "Dev",
+          "Nila"
+        ]
+      ]
+    },
+    {
+      "sentence": "Maya does not like science.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Maya might live in Chennai.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "I think Maya knows Ravi.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Does Maya live in Chennai?",
+      "expected_facts": []
+    },
+    {
+      "sentence": "The weather is pleasant today.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Arun is the father of.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Arun father Maya.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Maya could be married to Ravi.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Perhaps Ravi likes science.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Maybe Arun owns a car.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Ravi is not the mother of Maya.",
+      "expected_facts": []
+    },
+    {
+      "sentence": "Unsupported words with no known relation.",
+      "expected_facts": []
+    }
+  ]
+}
