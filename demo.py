@@ -1,9 +1,10 @@
+"""English-only NFD field memory demonstration."""
 from nova_field import NovaFieldMemory
 
 memory = NovaFieldMemory(capacity=32)
-memory.store("tamil-greeting", "வணக்கம்")
-memory.store("english-greeting", "hello")
-memory.store("coding", "write a Python function")
+memory.store("english-greeting", "Hello is a common English greeting.")
+memory.store("coding", "Write a Python function to sort a list.")
+memory.store("security", "Use multi-factor authentication to protect accounts.")
 
-for score, record in memory.recall("வணக்கம்"):
+for score, record in memory.recall("Hello is a common English greeting.")[:3]:
     print(f"{score:.4f}  {record.label}: {record.content}")
