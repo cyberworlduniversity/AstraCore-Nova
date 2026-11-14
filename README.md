@@ -11,7 +11,8 @@ A clean-room research prototype exploring a deterministic, non-token, non-Transf
 ## Implemented components
 - NFD field encoding and bounded similarity-based episodic recall.
 - Tri-ledger dynamics with activation, temporal trace, prediction-error tension, and bounded local adaptation.
-- Narrow English sentence-pattern extraction for parent, father, mother, and friend relations.
+- Expanded deterministic English relation grammar with 12 explicit patterns.
+- English patterns for family relations, friendship, marriage, residence/location, employment, knowledge, ownership, and preferences.
 - Deterministic positive-Horn forward chaining with proof traces and resource limits.
 - Bounded fact memory with evidence IDs, source provenance, duplicate consolidation, and configurable contradiction reporting.
 - Versioned JSON persistence with strict load validation and atomic file replacement.
@@ -53,16 +54,25 @@ To restore a saved snapshot, call `engine.load_memory("nova-memory.json")`. The 
 
 ## Supported English sentence patterns
 
+The extractor matches complete, explicit forms such as:
+
 - `Arun is the father of Maya.`
 - `Meena is the mother of Ravi.`
-- `Maya is a friend of Arun.`
 - `Arun is a parent of Maya.`
+- `Maya is a friend of Arun.`
+- `Arun is married to Meena.`
+- `Maya lives in Chennai.` / `Ravi resides in Vellore.`
+- `CWU is located in India.`
+- `Hemanathan works at CWU.` / `Maya is employed at Acme Labs.`
+- `Arun knows Ravi.`
+- `Maya owns a laptop.`
+- `Ravi likes science.` / `Meena loves music.`
 
-Only these documented complete patterns are extracted. Unsupported sentences produce no guessed facts. The reasoner consumes structured facts and explicit rules; it is not a general natural-language understanding engine. Contradiction detection requires caller-configured opposing predicates and preserves both sides.
+Only the documented complete patterns are extracted. Negated, uncertain, question-form, or otherwise unsupported sentences are not converted into positive facts. Unsupported sentences produce no guessed facts. The reasoner currently derives parent and grandparent relations from explicit family facts; it does not infer arbitrary relationships. Contradiction detection requires caller-configured opposing predicates and preserves both sides.
 
 ## Validation and limitations
 
-GitHub Actions validates the test suite on Python 3.10, 3.11, 3.12, and 3.13 and runs the NFD validation benchmark. Passing tests proves the tested software behavior only. Synthetic ablations and microbenchmarks are not semantic-language benchmarks. Similarity scores are not semantic confidence.
+GitHub Actions validates the test suite on Python 3.10, 3.11, 3.12, and 3.13 and runs the NFD validation benchmark. The extended English grammar has dedicated regression tests for supported patterns, unsupported/negative inputs, self-relations, verbalization, and multi-sentence extraction. Passing tests proves the tested software behavior only. Synthetic ablations and microbenchmarks are not semantic-language benchmarks. Similarity scores are not semantic confidence.
 
 This remains a research prototype, not a production-ready autonomous AI application. It does not provide arbitrary English understanding, open-domain fluent generation, network APIs, authentication, web access, or autonomous tool execution. The interactive CLI and JSON demo are local interfaces, not a deployed service.
 
