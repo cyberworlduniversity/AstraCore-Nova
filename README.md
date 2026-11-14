@@ -13,20 +13,25 @@ A clean-room research prototype exploring a deterministic, non-token, non-Transf
 - Tri-ledger dynamics with activation, temporal trace, prediction-error tension, and bounded local adaptation.
 - Narrow English sentence-pattern extraction for parent, father, mother, and friend relations.
 - Deterministic positive-Horn forward chaining with proof traces and resource limits.
-- Bounded in-process fact memory with source provenance, duplicate consolidation, and configurable contradiction reporting.
+- Bounded fact memory with evidence IDs, source provenance, duplicate consolidation, and configurable contradiction reporting.
+- Versioned JSON persistence with strict load validation and atomic file replacement.
 - EnglishKnowledgeEngine connecting extraction, memory, and inference.
-- Runnable JSON-output end-to-end demonstration in `english_demo.py`.
+- Interactive English CLI and JSON-output demonstration.
 
-## Quick start
+## Requirements and quick start
 
-Requires Python 3.10 or newer. No package installation is required.
+Python 3.10 or newer. No package installation is required.
 
 ```bash
 python -m unittest discover -s tests -v
 python -m nova_core.validation
+python -m nova_core --memory nova-memory.json
 python english_demo.py
 python english_demo.py "Arun is the father of Maya. Maya is the mother of Ravi."
 ```
+
+The interactive CLI accepts supported English statements and commands:
+`:facts`, `:save`, `:load`, `:help`, and `:quit`. It saves changed memory on exit.
 
 ## English knowledge pipeline
 
@@ -44,7 +49,7 @@ print(result.memory.conflicts)
 engine.save_memory("nova-memory.json")
 ```
 
-The CLI emits JSON containing extraction decisions, structured facts, derived facts, proof steps, memory evidence, and configured conflicts. Unsupported sentences are reported and never guessed.
+To restore a saved snapshot, call `engine.load_memory("nova-memory.json")`. The file is versioned JSON; malformed or unsupported snapshots are rejected.
 
 ## Supported English sentence patterns
 
@@ -53,14 +58,16 @@ The CLI emits JSON containing extraction decisions, structured facts, derived fa
 - `Maya is a friend of Arun.`
 - `Arun is a parent of Maya.`
 
-The extractor intentionally supports a narrow set of complete sentence forms. The reasoner consumes structured facts and explicit rules; it is not a general natural-language understanding engine.
+Only these documented complete patterns are extracted. Unsupported sentences produce no guessed facts. The reasoner consumes structured facts and explicit rules; it is not a general natural-language understanding engine. Contradiction detection requires caller-configured opposing predicates and preserves both sides.
 
 ## Validation and limitations
 
-CI tests target Python 3.10–3.13. Synthetic ablations and microbenchmarks measure software mechanisms, not semantic intelligence. Similarity scores are not semantic confidence. Fact memory is in-process and bounded; it is not persistent across process restarts. Contradiction detection requires caller-configured opposing predicates. The prototype does not provide arbitrary English understanding, open-domain fluent generation, authentication, network APIs, web access, or autonomous tool use.
+GitHub Actions validates the test suite on Python 3.10, 3.11, 3.12, and 3.13 and runs the NFD validation benchmark. Passing tests proves the tested software behavior only. Synthetic ablations and microbenchmarks are not semantic-language benchmarks. Similarity scores are not semantic confidence.
 
-Passing tests proves the tested software behavior only. It does not establish general intelligence, human-level reasoning, or global architectural novelty. Compare against documented baselines and conduct literature/prior-art review before making research novelty claims.
+This remains a research prototype, not a production-ready autonomous AI application. It does not provide arbitrary English understanding, open-domain fluent generation, network APIs, authentication, web access, or autonomous tool execution. The interactive CLI and JSON demo are local interfaces, not a deployed service.
 
 ## Language scope
 
-This development phase is English-only at the sentence extraction and user-facing demo layers. The low-level Unicode event-processing primitive remains language-agnostic. Tamil-specific sentence patterns and test examples are deferred to a later phase.
+Sentence extraction, examples, and user-facing demonstrations are English-only in this phase. The low-level Unicode event-processing primitive remains language-agnostic. Tamil-specific sentence patterns and tests are deferred to a later phase.
+
+No claim of general intelligence, human-level reasoning, or global architectural novelty is made. Compare against documented baselines and conduct literature/prior-art review before making research novelty claims.
