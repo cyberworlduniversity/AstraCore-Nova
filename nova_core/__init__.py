@@ -5,6 +5,7 @@ from .nfd_dynamics import NFDFrame, NFDDynamics
 from .reasoning import IndependentReasoner, ProofStep, ReasoningResult, Rule
 from .fact_extraction import ExtractionResult, EnglishFactExtractor, verbalize_fact
 from .fact_memory import FactConflict, FactEvidence, FactMemory, MemoryReport
+from .knowledge import EnglishKnowledgeEngine, KnowledgeResult
 
 __all__ = [
     "AgentReply", "Episode", "EpisodicMemory", "NFDFrame",
@@ -12,4 +13,5 @@ __all__ = [
     "IndependentReasoner", "ProofStep", "ReasoningResult", "Rule",
     "ExtractionResult", "EnglishFactExtractor", "verbalize_fact",
     "FactConflict", "FactEvidence", "FactMemory", "MemoryReport",
+    "EnglishKnowledgeEngine", "KnowledgeResult",
 ]
