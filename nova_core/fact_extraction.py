@@ -78,7 +78,7 @@ class EnglishFactExtractor:
             raise ValueError("sentence must be a non-empty string")
         if len(sentence) > self.MAX_SENTENCE_CHARS:
             raise ValueError("sentence exceeds the maximum character limit")
-        if any(ord(char) < 32 and char not in "\\t" for char in sentence):
+        if any(ord(char) < 32 and char not in "\t" for char in sentence):
             raise ValueError("sentence contains unsupported control characters")
         text = self._clean(sentence)
         for name, pattern, relation in self._patterns:
