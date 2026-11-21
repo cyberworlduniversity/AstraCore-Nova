@@ -18,18 +18,23 @@ def main():
     model = NovaTiny(**checkpoint.get("config", {})).to(device)
     model.load_state_dict(checkpoint["model"])
     model.eval()
-    prompt = torch.tensor(list(args.prompt.encode("utf-8")), dtype=torch.long, device=device)
-    if prompt.numel() == 0:
-        prompt = torch.tensor([32], dtype=torch.long, device=device)
+
+    prompt_bytes = args.prompt.encode("utf-8")
+    if not prompt_bytes:
+        prompt_bytes = b" "
+    prompt = torch.tensor(list(prompt_bytes), dtype=torch.long, device=device)
     generated = prompt.unsqueeze(0)
     hidden = None
     with torch.no_grad():
+        logits, hidden = model(prompt.unsqueeze(0), hidden)
         for _ in range(args.max_new_bytes):
-            logits, hidden = model(generated[:, -128:], hidden)
             next_logits = logits[:, -1, :] / max(args.temperature, 1e-5)
             next_byte = torch.multinomial(torch.softmax(next_logits, dim=-1), 1)
             generated = torch.cat((generated, next_byte), dim=1)
-    print(generated[0].cpu().numpy().tobytes().decode("utf-8", errors="replace"))
+            logits, hidden = model(next_byte, hidden)
+
+    text = generated[0].cpu().numpy().tobytes().decode("utf-8", errors="replace")
+    print(text)
 
 
 if __name__ == "__main__":
